@@ -9,7 +9,8 @@ export const runtime = 'edge'
 
 export async function POST(req: Request) {
   const json = await req.json()
-  const { messages, previewToken } = json
+  const { messages, previewToken, model } = json
+  console.log('model', model)
   const session = await auth()
 
   if (process.env.VERCEL_ENV !== 'preview') {
@@ -25,9 +26,9 @@ export async function POST(req: Request) {
   const openai = new OpenAIApi(configuration)
 
   const res = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
+    model: model || 'gpt-3.5-turbo',
     messages,
-    temperature: 0.7,
+    temperature: 0.5,
     stream: true
   })
 
